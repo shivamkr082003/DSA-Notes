@@ -77,7 +77,7 @@ void mergeSort(int arr[], int s, int e) {
 		return;
 	}
 	//break
-	int mid = (s+e)/2;
+	int mid = (s+e)/2;  
 	//recusive call for left array
 	mergeSort(arr,s, mid);
 	//recusive call for right array
