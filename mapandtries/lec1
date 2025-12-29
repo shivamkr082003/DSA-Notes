@@ -1,0 +1,188 @@
+#include <iostream>
+#include<unordered_map>
+using namespace std;
+
+int main() {
+  
+  //creation
+  unordered_map<string,int> mapping;
+
+  ///insertion
+  pair<string, int> p = make_pair("love", 25);
+
+  pair<string,int> q("dipansh",24);
+
+  pair<string,int> r;
+  q.first = "arun";
+  q.second = 21;
+  //insertion 
+  mapping.insert(p);
+  mapping.insert(q);
+  mapping.insert(r);
+  //insert
+  mapping["babbar"] = 51;
+
+  cout << "Size of map: " << mapping.size() << endl; 
+  //ACCESS 
+  cout << mapping.at("love") << endl;
+  cout << mapping["love"] << endl;
+
+  //searching
+  cout << mapping.count("lover") << endl;
+  cout << "Size of map: " << mapping.size() << endl; 
+
+  if(mapping.find("babbar") != mapping.end() ) {
+    cout << "Found" << endl;
+  }
+  else {
+    cout << "Not Found" << endl;
+  }
+   cout << "Size of map: " << mapping.size() << endl; 
+   cout << mapping["kumar"] << endl;
+   cout << "Size of map: " << mapping.size() << endl;
+  return 0;
+}
+
+
+
+#include <iostream>
+#include<unordered_map>
+using namespace std;
+
+void countCharacters(unordered_map<char,int> &mapping, string str) {
+  for(int i=0; i<str.length(); i++) {
+    char ch = str[i];
+    mapping[ch]++;
+  }
+}
+
+int main() {
+  string str = "lovebbabbar";
+  unordered_map<char,int> mapping;
+  countCharacters(mapping,str);
+
+  for(auto i: mapping) {
+    cout << i.first << " -> " <<i.second << endl;
+  }
+
+  return 0;
+}
+
+
+
+class Info{
+    public:
+        char val;
+        int count;
+    Info(char ch, int cnt) {
+        this->val = ch;
+        this->count = cnt;
+    }
+};
+
+class compare{
+    public:
+        bool operator()(Info a, Info b) {
+            return a.count < b.count;
+        }
+};
+
+
+class Solution {
+public:
+    string reorganizeString(string s) {
+        unordered_map<char,int> freq;
+        //int freq[26] = {0};
+
+        //count freq of all chartacter in string
+        for(int i=0; i<s.length(); i++) {
+            char ch = s[i];
+            freq[ch]++;
+        }
+        //push all characters in maxHeap
+        priority_queue<Info, vector<Info>, compare> maxHeap;
+        //push all characters into heap, where freq > 0
+        for(char i='a'; i<='z'; i++) {
+            if(freq[i] > 0) {
+                Info temp(i, freq[i]);
+                // temp.val = i+'a';
+                // temp.count = freq[i];
+                maxHeap.push(temp);
+            }
+        }
+
+        string ans = "";
+
+        while(maxHeap.size() > 1) {
+            Info first = maxHeap.top();
+            maxHeap.pop();
+            Info second = maxHeap.top();
+            maxHeap.pop();
+
+            ans.push_back(first.val);
+            first.count--;
+            ans.push_back(second.val);
+            second.count--;
+
+            if(first.count > 0) {
+                maxHeap.push(first);
+            }
+            if(second.count > 0) {
+                maxHeap.push(second);
+            }
+        }
+
+        //if 1 element bacha h, toh alag se handle karo
+        if(maxHeap.size() == 1) {
+            Info first = maxHeap.top();
+            maxHeap.pop();
+
+            ans.push_back(first.val);
+            first.count--;
+
+            if(first.count != 0 ) {
+                //answer not possible
+                return  "";
+            }
+        }
+    return ans;
+ 
+    }
+};
+
+
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+
+        unordered_map<ListNode* ,bool> mapping;
+        ListNode* temp = head;
+
+        while(temp != NULL) {
+            //address check
+            if(mapping.find(temp) != mapping.end()) {
+                //cycle present
+                return true;
+            }
+            else {
+               // node not visited beforehand
+               //store
+               mapping[temp] = true;
+            }
+            temp = temp ->next;
+        }
+        //cycle absenet
+        return false;
+        
+    }
+};
