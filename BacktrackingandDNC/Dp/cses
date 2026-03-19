@@ -1,0 +1,5 @@
+//1 problem dice combination similar question
+//377 (same question) ,climbing stairs,518,1155
+// 2 thing remember : if order matter then use loop for permutation, if not then used include eclude property.
+//slightly change based on the same concept;
+
