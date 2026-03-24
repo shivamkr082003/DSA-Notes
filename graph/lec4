@@ -106,6 +106,8 @@ class Graph {
 			int topNode = topPair.second;
 			//remove the topNode
 			st.erase(st.begin());
+			// 🔥 IMPORTANT: skip outdated entries
+           if(topDist > dist[topNode]) continue;
 
 			//update distance of nbr
 			for(pair<int,int> nbrPair: adj[topNode]) {
@@ -136,6 +138,48 @@ class Graph {
 
 
 };
+
+
+void dijkstraShortestDistance(int n, int src, int dest) {
+    vector<int> dist(n+1, INT_MAX);
+
+    // min-heap: (distance, node)
+    priority_queue<
+        pair<int,int>, 
+        vector<pair<int,int>>, 
+        greater<pair<int,int>>
+    > pq;
+
+    // initial state
+    dist[src] = 0;
+    pq.push({0, src});
+
+    while(!pq.empty()) {
+        auto top = pq.top();
+        pq.pop();
+
+        int currDist = top.first;
+        int currNode = top.second;
+
+        // 🔥 IMPORTANT: skip outdated entries
+        if(currDist > dist[currNode]) continue;
+
+        // relax neighbors
+        for(auto nbrPair : adj[currNode]) {
+            int nbrNode = nbrPair.first;
+            int weight = nbrPair.second;
+
+            if(currDist + weight < dist[nbrNode]) {
+                dist[nbrNode] = currDist + weight;
+                pq.push({dist[nbrNode], nbrNode});
+            }
+        }
+    }
+
+    cout << "Shortest Distance from " << src 
+         << " to " << dest << " is: " 
+         << dist[dest] << endl;
+}
 
 
 int main() {
